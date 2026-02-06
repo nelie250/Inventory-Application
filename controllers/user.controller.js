@@ -31,7 +31,6 @@ const createUser = async (req, res) => {
       "staff",
     );
 
-   
     res.redirect("/user/login?signup=success");
   } catch (error) {
     console.error("Signup error:", error);
@@ -49,7 +48,6 @@ const getLoginForm = (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
 
     if (!email || !password) {
       return res.status(400).render("loginForm", {
@@ -74,13 +72,12 @@ const loginUser = async (req, res) => {
       });
     }
 
-
     req.session = req.session || {};
     req.session.userId = user.id;
     req.session.userName = user.name;
     req.session.userEmail = user.email;
     req.session.userRole = user.role;
-n
+
     res.redirect("/dashboard");
   } catch (error) {
     console.error("Login error:", error);
@@ -91,12 +88,10 @@ n
   }
 };
 
-
 const logoutUser = (req, res) => {
   try {
     if (req.session) {
       if (typeof req.session.destroy === "function") {
-      
         req.session.destroy((err) => {
           if (err) console.error("Session destroy error:", err);
           return res.redirect("/user/login");
@@ -113,7 +108,6 @@ const logoutUser = (req, res) => {
   }
 };
 
-
 const getAllUsers = async (req, res) => {
   try {
     const users = await userModel.getAllUsers();
@@ -122,7 +116,6 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ error: "Error fetching users" });
   }
 };
-
 
 const getUserById = async (req, res) => {
   try {

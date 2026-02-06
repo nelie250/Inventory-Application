@@ -11,15 +11,15 @@ const getDashboard = async (req, res) => {
     const orderCount = await pool.query("SELECT COUNT(*) as count FROM orders");
 
     const lowStockProducts = await pool.query(
-      `SELECT p.id, p.name, p.sku, i.quantity, i.reorder_level 
+      `SELECT p.id, p.name, p.sku, COALESCE(SUM(i.quantity), 0) AS quantity, p.min_stock_level
        FROM products p
        LEFT JOIN inventory i ON p.id = i.product_id
-       WHERE i.quantity < COALESCE(i.reorder_level, 0)
-       ORDER BY i.quantity ASC
+       GROUP BY p.id, p.name, p.sku, p.min_stock_level
+       HAVING COALESCE(SUM(i.quantity), 0) < COALESCE(p.min_stock_level, 0)
+       ORDER BY COALESCE(SUM(i.quantity), 0) ASC
        LIMIT 5`,
     );
 
-  
     const recentOrders = await pool.query(
       `SELECT o.id, o.status, o.total_amount, o.created_at, u.name 
        FROM orders o
@@ -28,10 +28,11 @@ const getDashboard = async (req, res) => {
        LIMIT 5`,
     );
     const topProducts = await pool.query(
-      `SELECT p.id, p.name, p.sku, i.quantity
+      `SELECT p.id, p.name, p.sku, COALESCE(SUM(i.quantity), 0) AS quantity, p.selling_price
        FROM products p
        LEFT JOIN inventory i ON p.id = i.product_id
-       ORDER BY i.quantity DESC
+       GROUP BY p.id, p.name, p.sku, p.selling_price
+       ORDER BY COALESCE(SUM(i.quantity), 0) DESC
        LIMIT 5`,
     );
 
