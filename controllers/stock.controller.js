@@ -82,7 +82,11 @@ exports.create = async (req, res) => {
     }
 
     await client.query("COMMIT");
-    res.redirect("/stock-transactions");
+    if (product_id) {
+      res.redirect(`/products/${product_id}`);
+    } else {
+      res.redirect("/stock-transactions");
+    }
   } catch (err) {
     await client.query("ROLLBACK");
     console.error(err);
