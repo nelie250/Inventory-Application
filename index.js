@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const ejs = require("ejs");
@@ -8,9 +9,14 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const sessionSecret = process.env.SESSION_SECRET || "dev_secret_change_me";
+if (!process.env.SESSION_SECRET) {
+  console.warn("SESSION_SECRET is not set; using a default dev secret.");
+}
+
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 24 * 60 * 60 * 1000 },
