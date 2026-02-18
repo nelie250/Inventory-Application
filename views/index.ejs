@@ -1,0 +1,84 @@
+﻿<%- include('header') %>
+
+<div class="hero">
+  <div class="hero-card">
+    <h1>Inventory Application</h1>
+    <p>Manage products, stock levels, suppliers, and orders with clarity.</p>
+    <div class="page-actions">
+      <a href="/dashboard" class="btn">Dashboard</a>
+      <a href="/user/login" class="btn btn-secondary">Login</a>
+      <a href="/user/signup" class="btn btn-secondary">Sign Up</a>
+      <a href="/categories" class="btn btn-secondary">View Categories</a>
+      <a href="/products" class="btn btn-secondary">View Products</a>
+    </div>
+  </div>
+  <div class="hero-panel">
+    <h2>Keep your inventory sharp</h2>
+    <p>Track low stock, monitor orders, and move faster with clean views and quick actions.</p>
+    <ul class="feature-list">
+      <li>Live stock visibility</li>
+      <li>Supplier and product overview</li>
+      <li>Order tracking at a glance</li>
+    </ul>
+  </div>
+</div>
+
+<div class="dashboard">
+  <div class="dashboard-section">
+    <h2>Categories</h2>
+    <% if (categories.length === 0) { %>
+      <p class="alert alert-info">No categories yet. <a href="/categories/new">Create the first one</a></p>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories.forEach(function(c) { %>
+            <tr>
+              <td><a href="/categories/<%= c.id %>"><%= c.name %></a></td>
+              <td><%= c.description || '-' %></td>
+              <td><a href="/categories/<%= c.id %>/edit" class="btn btn-secondary btn-sm">Edit</a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>Products</h2>
+    <% if (products.length === 0) { %>
+      <p class="alert alert-info">No products yet. <a href="/products/new">Add your first product</a></p>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach(function(p) { %>
+            <tr>
+              <td><code><%= p.sku || '-' %></code></td>
+              <td><a href="/products/<%= p.id %>"><%= p.name %></a></td>
+              <td><%= p.category || 'Uncategorized' %></td>
+              <td>$<%= parseFloat(p.selling_price || 0).toFixed(2) %></td>
+              <td><a href="/products/<%= p.id %>/edit" class="btn btn-secondary btn-sm">Edit</a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</div>
+
+<%- include('footer') %>

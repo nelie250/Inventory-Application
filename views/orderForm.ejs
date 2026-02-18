@@ -1,0 +1,104 @@
+﻿<%- include('header') %>
+<h1><%= order ? 'Edit' : 'Create New' %> Order</h1>
+
+<form method="post" action="<%= order ? ('/orders/' + order.id) : '/orders' %>" <%= order ? 'data-admin-confirm="update"' : '' %>>
+  <div class="form-group">
+    <label for="user_id">User</label>
+    <select id="user_id" name="user_id">
+      <option value="">-- No User --</option>
+      <% users.forEach(function(u){ %>
+        <option value="<%= u.id %>" <%= order && order.user_id == u.id ? 'selected' : '' %>><%= u.name %> (<%= u.email %>)</option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="status">Status</label>
+    <select id="status" name="status">
+      <% const statuses = ['pending', 'paid', 'shipped', 'completed', 'cancelled']; %>
+      <% statuses.forEach(function(s){ %>
+        <option value="<%= s %>" <%= order && order.status == s ? 'selected' : '' %>><%= s %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <fieldset class="form-fieldset">
+    <legend class="form-legend">Order Items</legend>
+
+    <div id="items-container">
+      <% if (items && items.length > 0) { %>
+        <% items.forEach(function(item, index) { %>
+          <div class="order-item">
+            <div class="form-group">
+              <label>Product</label>
+              <select name="product_id" required>
+                <option value="">-- Select Product --</option>
+                <% products.forEach(function(p){ %>
+                  <option value="<%= p.id %>" <%= item.product_id == p.id ? 'selected' : '' %>><%= p.name %> (<%= p.sku %>) - $<%= p.selling_price %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Quantity</label>
+              <input type="number" name="quantity" value="<%= item.quantity %>" min="1" required>
+            </div>
+
+            <div class="form-group">
+              <label>Unit Price</label>
+              <input type="number" name="unit_price" step="0.01" value="<%= item.unit_price %>" min="0" required>
+            </div>
+
+            <button type="button" class="btn btn-danger" onclick="removeItem(this)">Remove Item</button>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <button type="button" class="btn btn-secondary" onclick="addItem()">+ Add Item</button>
+  </fieldset>
+
+  <div class="page-actions">
+    <button type="submit" class="btn">Save Order</button>
+    <a href="/orders" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<script>
+function addItem() {
+  const container = document.getElementById('items-container');
+  const newItem = document.createElement('div');
+  newItem.className = 'order-item';
+
+  let productsOptions = '<option value="">-- Select Product --</option>';
+  <% products.forEach(function(p){ %>
+    productsOptions += '<option value="<%= p.id %>"><%= p.name %> (<%= p.sku %>) - $<%= p.selling_price %></option>';
+  <% }) %>
+
+  newItem.innerHTML = `
+    <div class="form-group">
+      <label>Product</label>
+      <select name="product_id" required>
+        ${productsOptions}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Quantity</label>
+      <input type="number" name="quantity" value="1" min="1" required>
+    </div>
+    <div class="form-group">
+      <label>Unit Price</label>
+      <input type="number" name="unit_price" step="0.01" value="0" min="0" required>
+    </div>
+    <button type="button" class="btn btn-danger" onclick="removeItem(this)">Remove Item</button>
+  `;
+
+  container.appendChild(newItem);
+}
+
+function removeItem(button) {
+  button.parentElement.remove();
+}
+</script>
+
+<%- include('footer') %>

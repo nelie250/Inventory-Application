@@ -1,0 +1,53 @@
+﻿<%- include('header') %>
+<h1>Supplier: <%= supplier.name %></h1>
+
+<div class="list-item">
+  <p><strong>Supplier ID:</strong> <%= supplier.id %></p>
+  <% if (supplier.contact_name) { %>
+    <p><strong>Contact Name:</strong> <%= supplier.contact_name %></p>
+  <% } %>
+  <% if (supplier.contact_email) { %>
+    <p><strong>Contact Email:</strong> <%= supplier.contact_email %></p>
+  <% } %>
+  <% if (supplier.phone) { %>
+    <p><strong>Phone:</strong> <%= supplier.phone %></p>
+  <% } %>
+  <% if (supplier.address) { %>
+    <p><strong>Address:</strong></p>
+    <p><%= supplier.address %></p>
+  <% } %>
+</div>
+
+<% if (products.length > 0) { %>
+  <h2>Products from this Supplier</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Product Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.forEach(function(p) { %>
+        <tr>
+          <td><code><%= p.sku || '-' %></code></td>
+          <td><a href="/products/<%= p.id %>"><%= p.name %></a></td>
+          <td>
+            <a href="/products/<%= p.id %>/edit" class="btn btn-secondary">Edit</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<div class="page-actions">
+  <a href="/suppliers" class="btn btn-secondary">Back to Suppliers</a>
+  <a href="/suppliers/<%= supplier.id %>/edit" class="btn">Edit Supplier</a>
+  <form method="post" action="/suppliers/<%= supplier.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this supplier?');">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div>
+
+<%- include('footer') %>

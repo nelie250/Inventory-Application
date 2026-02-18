@@ -1,0 +1,34 @@
+﻿<%- include('header') %>
+<h1><%= item ? 'Edit' : 'Add' %> Inventory</h1>
+
+<form method="post" action="<%= item ? ('/inventory/' + item.id) : '/inventory' %>" <%= item ? 'data-admin-confirm="update"' : '' %>>
+  <div class="form-group">
+    <label for="product_id">Product *</label>
+    <select id="product_id" name="product_id" required>
+      <option value="">-- Select Product --</option>
+      <% products.forEach(function(p){ %>
+        <option value="<%= p.id %>" <%= item && item.product_id == p.id ? 'selected' : '' %>><%= p.name %> (<%= p.sku %>)</option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="location">Location *</label>
+    <input type="text" id="location" name="location" value="<%= item ? item.location : '' %>" placeholder="e.g., Warehouse A - Rack 1" required>
+  </div>
+
+  <div class="form-group">
+    <label for="quantity">Quantity</label>
+    <input type="number" id="quantity" name="quantity" value="<%= item ? item.quantity : '0' %>">
+  </div>
+
+  <div class="form-group">
+    <label for="reorder_level">Reorder Level</label>
+    <input type="number" id="reorder_level" name="reorder_level" value="<%= item ? item.reorder_level : '0' %>">
+  </div>
+
+  <button type="submit" class="btn">Save Inventory</button>
+  <a href="/inventory" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('footer') %>

@@ -1,0 +1,123 @@
+﻿<%- include('header') %>
+
+<div class="dashboard">
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <p class="page-subtitle">Overview of activity and stock health.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3><%= categories %></h3>
+      <p>Categories</p>
+      <a href="/categories" class="stat-link">View details</a>
+    </div>
+    <div class="stat-card">
+      <h3><%= products %></h3>
+      <p>Products</p>
+      <a href="/products" class="stat-link">View details</a>
+    </div>
+    <div class="stat-card">
+      <h3><%= users %></h3>
+      <p>Users</p>
+    </div>
+    <div class="stat-card">
+      <h3><%= orders %></h3>
+      <p>Orders</p>
+    </div>
+  </div>
+
+  <% if (lowStockProducts && lowStockProducts.length > 0) { %>
+    <div class="dashboard-section">
+      <h2>Low Stock Products</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Product Name</th>
+            <th>Current Stock</th>
+            <th>Min Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% lowStockProducts.forEach(product => { %>
+            <tr class="alert-row">
+              <td><code><%= product.sku %></code></td>
+              <td><%= product.name %></td>
+              <td class="stock-low"><strong><%= product.quantity %></strong></td>
+              <td><%= product.min_stock_level || 0 %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+
+  <div class="dashboard-section">
+    <h2>Recent Orders</h2>
+    <% if (recentOrders && recentOrders.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Total Amount</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentOrders.forEach(order => { %>
+            <tr>
+              <td><strong>#<%= order.id %></strong></td>
+              <td><%= order.name %></td>
+              <td><span class="status-badge"><%= order.status %></span></td>
+              <td>$<%= parseFloat(order.total_amount || 0).toFixed(2) %></td>
+              <td><%= new Date(order.created_at).toLocaleDateString() %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p class="empty-message">No orders yet</p>
+    <% } %>
+  </div>
+
+  <div class="dashboard-section">
+    <h2>Top Products by Stock</h2>
+    <% if (topProducts && topProducts.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Product Name</th>
+            <th>In Stock</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% topProducts.forEach(product => { %>
+            <tr>
+              <td><code><%= product.sku %></code></td>
+              <td><%= product.name %></td>
+              <td><strong><%= product.quantity %></strong></td>
+              <td>$<%= parseFloat(product.selling_price).toFixed(2) %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+
+  <div class="quick-actions">
+    <h2>Quick Actions</h2>
+    <div class="action-buttons">
+      <a href="/categories/new" class="btn btn-primary">Add Category</a>
+      <a href="/products/new" class="btn btn-primary">Add Product</a>
+      <a href="/categories" class="btn btn-secondary">View Categories</a>
+      <a href="/products" class="btn btn-secondary">View Products</a>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

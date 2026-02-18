@@ -1,0 +1,28 @@
+﻿<%- include('header') %>
+<h1>Product: <%= product.name %></h1>
+
+<div class="list-item">
+  <p><strong>SKU:</strong> <code><%= product.sku || 'Not set' %></code></p>
+  <p><strong>Category:</strong> <%= product.category || 'Uncategorized' %></p>
+  <p><strong>Supplier:</strong> <%= product.supplier || 'No Supplier' %></p>
+  <p><strong>Unit:</strong> <%= product.unit %></p>
+  <p><strong>Selling Price:</strong> $<%= parseFloat(product.selling_price || 0).toFixed(2) %></p>
+  <p><strong>Cost:</strong> $<%= parseFloat(product.cost_price || 0).toFixed(2) %></p>
+  <p><strong>Current Stock:</strong> <%= product.stock || 0 %></p>
+  <p><strong>Minimum Stock Level:</strong> <%= product.min_stock_level || 0 %></p>
+  <% if (product.description) { %>
+    <p><strong>Description:</strong></p>
+    <p><%= product.description %></p>
+  <% } %>
+  <p><strong>Created:</strong> <%= product.created_at ? new Date(product.created_at).toLocaleDateString() : 'Unknown' %></p>
+</div>
+
+<div class="page-actions">
+  <a href="/products" class="btn btn-secondary">Back to Products</a>
+  <a href="/products/<%= product.id %>/edit" class="btn">Edit Product</a>
+  <form method="post" action="/products/<%= product.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this product? Inventory records will also be deleted.');">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div>
+
+<%- include('footer') %>

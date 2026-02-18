@@ -1,0 +1,19 @@
+﻿<%- include('header') %>
+<h1><%= category ? 'Edit' : 'Create New' %> Category</h1>
+
+<form method="post" action="<%= category ? ('/categories/' + category.id) : '/categories' %>" <%= category ? 'data-admin-confirm="update"' : '' %>>
+  <div class="form-group">
+    <label for="name">Category Name</label>
+    <input type="text" id="name" name="name" value="<%= category ? category.name : '' %>" required />
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description (Optional)</label>
+    <textarea id="description" name="description" rows="4"><%= category && category.description ? category.description : '' %></textarea>
+  </div>
+
+  <button type="submit" class="btn">Save Category</button>
+  <a href="/categories" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('footer') %>

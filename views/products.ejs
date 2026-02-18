@@ -1,0 +1,46 @@
+﻿<%- include('header') %>
+<h1>Products</h1>
+
+<a href="/products/new" class="btn">+ New Product</a>
+
+<% if (typeof message !== 'undefined' && message) { %>
+  <div class="alert alert-success"><%= message %></div>
+<% } %>
+
+<% if (products.length === 0) { %>
+  <p class="alert alert-info">No products yet. <a href="/products/new">Add your first product</a></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Supplier</th>
+        <th>Stock</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.forEach(function(p) { %>
+        <tr class="<%= newId && p.id === newId ? 'alert-row' : '' %>">
+          <td><code><%= p.sku || '-' %></code></td>
+          <td><a href="/products/<%= p.id %>"><%= p.name %></a></td>
+          <td><%= p.category || 'Uncategorized' %></td>
+          <td><%= p.supplier || 'No Supplier' %></td>
+          <td><%= p.stock || 0 %></td>
+          <td>$<%= parseFloat(p.selling_price || 0).toFixed(2) %></td>
+          <td>
+            <a href="/products/<%= p.id %>/edit" class="btn btn-secondary">Edit</a>
+            <form method="post" action="/products/<%= p.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this product?');">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('footer') %>

@@ -1,0 +1,43 @@
+﻿<%- include('header') %>
+<h1>Stock Transactions</h1>
+
+<a href="/stock-transactions/new" class="btn">+ New Transaction</a>
+
+<% if (transactions.length === 0) { %>
+  <p class="alert alert-info">No stock transactions yet. <a href="/stock-transactions/new">Record the first transaction</a></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Location</th>
+        <th>Quantity Change</th>
+        <th>Reason</th>
+        <th>User</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% transactions.forEach(function(t) { %>
+        <tr>
+          <td><%= new Date(t.created_at).toLocaleDateString() %></td>
+          <td><%= t.product_name || 'Deleted Product' %></td>
+          <td><code><%= t.sku || '-' %></code></td>
+          <td><%= t.location || '-' %></td>
+          <td><strong class="<%= t.quantity_change > 0 ? 'qty-positive' : 'qty-negative' %>"><%= t.quantity_change > 0 ? '+' : '' %><%= t.quantity_change %></strong></td>
+          <td><%= t.reason || '-' %></td>
+          <td><%= t.user_name || 'System' %></td>
+          <td>
+            <form method="post" action="/stock-transactions/<%= t.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this transaction?');">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('footer') %>

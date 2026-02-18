@@ -1,0 +1,24 @@
+﻿<%- include('header') %>
+<h1>Category: <%= category.name %></h1>
+
+<div class="list-item">
+  <p><strong>Category ID:</strong> <%= category.id %></p>
+  <p><strong>Type:</strong> <%= category.parent_id ? 'Subcategory' : 'Main Category' %></p>
+  <% if (category.parent_id) { %>
+    <p><strong>Parent ID:</strong> <%= category.parent_id %></p>
+  <% } %>
+  <% if (category.description) { %>
+    <p><strong>Description:</strong></p>
+    <p><%= category.description %></p>
+  <% } %>
+</div>
+
+<div class="page-actions">
+  <a href="/categories" class="btn btn-secondary">Back to Categories</a>
+  <a href="/categories/<%= category.id %>/edit" class="btn">Edit Category</a>
+  <form method="post" action="/categories/<%= category.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this category? This action cannot be undone.');">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div>
+
+<%- include('footer') %>

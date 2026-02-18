@@ -1,0 +1,54 @@
+﻿<%- include('header') %>
+<h1>Record Stock Transaction</h1>
+
+<form method="post" action="/stock-transactions">
+  <div class="form-group">
+    <label for="product_id">Product *</label>
+    <select id="product_id" name="product_id" required>
+      <option value="">-- Select Product --</option>
+      <% products.forEach(function(p){ %>
+        <option value="<%= p.id %>"><%= p.name %> (<%= p.sku %>)</option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="user_id">User</label>
+    <select id="user_id" name="user_id">
+      <option value="">-- Auto (Current User) --</option>
+      <% users.forEach(function(u){ %>
+        <option value="<%= u.id %>"><%= u.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="location">Location *</label>
+    <input type="text" id="location" name="location" placeholder="e.g., Main Warehouse" required>
+  </div>
+
+  <div class="form-group">
+    <label for="quantity_change">Quantity Change * <small>(positive for additions, negative for reductions)</small></label>
+    <input type="number" id="quantity_change" name="quantity_change" placeholder="e.g., 10 or -5" required>
+  </div>
+
+  <div class="form-group">
+    <label for="reason">Reason *</label>
+    <select id="reason" name="reason" required>
+      <option value="">-- Select Reason --</option>
+      <option value="Initial stock">Initial Stock</option>
+      <option value="Purchase">Purchase</option>
+      <option value="Sale">Sale</option>
+      <option value="Adjustment">Inventory Adjustment</option>
+      <option value="Damage">Damage / Loss</option>
+      <option value="Transfer">Transfer</option>
+      <option value="Return">Return</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn">Record Transaction</button>
+  <a href="/stock-transactions" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('footer') %>

@@ -1,0 +1,42 @@
+﻿<%- include('header') %>
+<h1>Inventory</h1>
+
+<a href="/inventory/new" class="btn">+ New Inventory</a>
+
+<% if (inventory.length === 0) { %>
+  <p class="alert alert-info">No inventory records yet. <a href="/inventory/new">Add inventory</a></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Location</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Reorder Level</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% inventory.forEach(function(i) { %>
+        <tr>
+          <td><%= i.product_name %></td>
+          <td><code><%= i.sku || '-' %></code></td>
+          <td><%= i.location %></td>
+          <td><strong><%= i.quantity %></strong></td>
+          <td><%= i.unit %></td>
+          <td><%= i.reorder_level %></td>
+          <td>
+            <a href="/inventory/<%= i.id %>/edit" class="btn btn-secondary">Edit</a>
+            <form method="post" action="/inventory/<%= i.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this inventory record?');">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('footer') %>

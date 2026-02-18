@@ -1,0 +1,75 @@
+<%- include('header') %>
+<h1><%= product ? 'Edit' : 'Create New' %> Product</h1>
+
+<% if (typeof message !== 'undefined' && message) { %>
+  <div class="alert alert-danger"><%= message %></div>
+<% } %>
+
+<form method="post" action="<%= product ? ('/products/' + product.id) : '/products' %>" <%= product ? 'data-admin-confirm="update"' : '' %>>
+  <div class="form-group">
+    <label for="sku">SKU (Stock Keeping Unit)</label>
+    <input type="text" id="sku" name="sku" value="<%= product ? product.sku : '' %>">
+    <small>Unique identifier for inventory tracking</small>
+  </div>
+
+  <div class="form-group">
+    <label for="name">Product Name *</label>
+    <input type="text" id="name" name="name" value="<%= product ? product.name : '' %>" required>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4"><%= product ? product.description : '' %></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="category_id">Category</label>
+    <select id="category_id" name="category_id">
+      <option value="">-- Uncategorized --</option>
+      <% categories.forEach(function(c){ %>
+        <option value="<%= c.id %>" <%= product && product.category_id == c.id ? 'selected' : '' %>><%= c.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="supplier_id">Supplier</label>
+    <select id="supplier_id" name="supplier_id">
+      <option value="">-- No Supplier --</option>
+      <% suppliers.forEach(function(s){ %>
+        <option value="<%= s.id %>" <%= product && product.supplier_id == s.id ? 'selected' : '' %>><%= s.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="unit">Unit</label>
+    <select id="unit" name="unit" required>
+      <% const units = ['kg', 'g', 'liter', 'piece']; %>
+      <% units.forEach(function(u){ %>
+        <option value="<%= u %>" <%= product && product.unit == u ? 'selected' : '' %>><%= u %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="selling_price">Selling Price ($)</label>
+    <input type="number" id="selling_price" name="selling_price" step="0.01" value="<%= product ? product.selling_price : '0' %>">
+  </div>
+
+  <div class="form-group">
+    <label for="cost_price">Cost ($)</label>
+    <input type="number" id="cost_price" name="cost_price" step="0.01" value="<%= product ? product.cost_price : '0' %>">
+  </div>
+
+  <div class="form-group">
+    <label for="min_stock_level">Minimum Stock Level</label>
+    <input type="number" id="min_stock_level" name="min_stock_level" value="<%= product ? product.min_stock_level : '0' %>">
+  </div>
+
+  <button type="submit" class="btn">Save Product</button>
+  <a href="/products" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('footer') %>
+

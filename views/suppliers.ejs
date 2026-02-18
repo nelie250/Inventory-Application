@@ -1,0 +1,38 @@
+﻿<%- include('header') %>
+<h1>Suppliers</h1>
+
+<a href="/suppliers/new" class="btn">+ New Supplier</a>
+
+<% if (suppliers.length === 0) { %>
+  <p class="alert alert-info">No suppliers yet. <a href="/suppliers/new">Add the first supplier</a></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% suppliers.forEach(function(s) { %>
+        <tr>
+          <td><a href="/suppliers/<%= s.id %>"><%= s.name %></a></td>
+          <td><%= s.contact_name || '-' %></td>
+          <td><%= s.contact_email || '-' %></td>
+          <td><%= s.phone || '-' %></td>
+          <td>
+            <a href="/suppliers/<%= s.id %>/edit" class="btn btn-secondary">Edit</a>
+            <form method="post" action="/suppliers/<%= s.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this supplier?');">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('footer') %>

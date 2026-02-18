@@ -1,0 +1,34 @@
+﻿<%- include('header') %>
+<h1><%= supplier ? 'Edit' : 'Create New' %> Supplier</h1>
+
+<form method="post" action="<%= supplier ? ('/suppliers/' + supplier.id) : '/suppliers' %>" <%= supplier ? 'data-admin-confirm="update"' : '' %>>
+  <div class="form-group">
+    <label for="name">Supplier Name *</label>
+    <input type="text" id="name" name="name" value="<%= supplier ? supplier.name : '' %>" required />
+  </div>
+
+  <div class="form-group">
+    <label for="contact_name">Contact Name</label>
+    <input type="text" id="contact_name" name="contact_name" value="<%= supplier ? supplier.contact_name : '' %>" />
+  </div>
+
+  <div class="form-group">
+    <label for="contact_email">Contact Email</label>
+    <input type="email" id="contact_email" name="contact_email" value="<%= supplier ? supplier.contact_email : '' %>" />
+  </div>
+
+  <div class="form-group">
+    <label for="phone">Phone</label>
+    <input type="tel" id="phone" name="phone" value="<%= supplier ? supplier.phone : '' %>" />
+  </div>
+
+  <div class="form-group">
+    <label for="address">Address</label>
+    <textarea id="address" name="address" rows="3"><%= supplier ? supplier.address : '' %></textarea>
+  </div>
+
+  <button type="submit" class="btn">Save Supplier</button>
+  <a href="/suppliers" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('footer') %>

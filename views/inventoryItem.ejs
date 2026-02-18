@@ -1,0 +1,26 @@
+﻿<%- include('header') %>
+<h1>Inventory Item: <%= item.product_name %> @ <%= item.location %></h1>
+
+<div class="list-item">
+  <p>
+    <strong>Product:</strong> <%= item.product_name %> (<code><%= item.sku %></code>)
+  </p>
+  <p><strong>Location:</strong> <%= item.location %></p>
+  <p>
+    <strong>Current Quantity:</strong> <strong><%= item.quantity %></strong>
+  </p>
+  <p><strong>Reorder Level:</strong> <%= item.reorder_level %></p>
+  <p>
+    <strong>Last Updated:</strong> <%= item.updated_at ? new Date(item.updated_at).toLocaleString() : 'Unknown' %>
+  </p>
+</div>
+
+<div class="page-actions">
+  <a href="/inventory" class="btn btn-secondary">Back to Inventory</a>
+  <a href="/inventory/<%= item.id %>/edit" class="btn">Edit</a>
+  <form method="post" action="/inventory/<%= item.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this inventory record?');">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div>
+
+<%- include('footer') %>

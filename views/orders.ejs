@@ -1,0 +1,40 @@
+﻿<%- include('header') %>
+<h1>Orders</h1>
+
+<a href="/orders/new" class="btn">+ New Order</a>
+
+<% if (orders.length === 0) { %>
+  <p class="alert alert-info">No orders yet. <a href="/orders/new">Create the first order</a></p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Status</th>
+        <th>Total Amount</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach(function(o) { %>
+        <tr>
+          <td><a href="/orders/<%= o.id %>">#<%= o.id %></a></td>
+          <td><%= o.user_name || 'Guest' %></td>
+          <td><span class="status-badge"><%= o.status %></span></td>
+          <td>$<%= parseFloat(o.total_amount || 0).toFixed(2) %></td>
+          <td><%= new Date(o.created_at).toLocaleDateString() %></td>
+          <td>
+            <a href="/orders/<%= o.id %>/edit" class="btn btn-secondary">Edit</a>
+            <form method="post" action="/orders/<%= o.id %>/delete" class="inline-form" data-admin-confirm="delete" onsubmit="return confirm('Delete this order?');">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('footer') %>
